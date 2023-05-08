@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Assiatant with memory</title>
+</head>
+<body>
+    <h1>AI Assiatant with memory</h1>
+    <form onsubmit="sendMessage(event)">
+        <input type="text" id="messageText" autocomplete="off"/>
+        <button>Send</button>
+    </form>
+    <ul id='messages'></ul>
+    <script>
+        var ws = new WebSocket("ws://localhost:8000/ws");
+        ws.onmessage = function(event) {
+            var messages = document.getElementById("messages")
+            var message = document.createElement("li")
+            var content = document.createTextNode("AI assistant: " + event.data)
+            message.appendChild(content)
+            messages.appendChild(message)
+        };
+        function sendMessage(event) {
+            event.preventDefault()
+            var input = document.getElementById("messageText")
+            var message = input.value
+            var messages = document.getElementById("messages")
+            var messageItem = document.createElement("li")
+            var messageContent = document.createTextNode("You: " + message)
+            messageItem.appendChild(messageContent)
+            messages.appendChild(messageItem)
+            ws.send(message)
+            input.value = ""
+        }
+    </script>
+</body>
+</html>
