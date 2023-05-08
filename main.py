@@ -1,7 +1,7 @@
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import FileResponse
 from pathlib import Path
-
+import uvicorn
 from chatbot import conversation, save_history
 
 app = FastAPI()
@@ -45,3 +45,14 @@ async def get():
     """
     file_path = Path("templates/index.html")
     return FileResponse(file_path)
+
+
+if __name__ == "__main__":
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        reload_dirs=["."],
+        reload_excludes=".venv/**/*.py",
+    )
